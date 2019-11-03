@@ -13,7 +13,7 @@ public class CustomerController {
 
   @Autowired  CustomerRepository repository;
 
-  @GetMapping("/bulk")
+  @PostMapping("/bulk")
   public String bulkcreate(){
     repository.save(new Customer("Ganesan", "Arunachalam"));
     repository.saveAll(Arrays.asList(new Customer("Salim", "Khan")
