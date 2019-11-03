@@ -25,17 +25,16 @@ public class CustomerController {
 
   @PostMapping()
   public String enroll(@RequestBody CustomerRepresentation customer){
-    repository.save(new Customer(customer.getFirstName(), customer.getLastName()));
-    return "Customer is created";
+    var id = repository.save(new Customer(customer.getFirstName(), customer.getLastName()));
+    return String.format("{ id: %s }", id);
   }
 
   @GetMapping()
   public List<CustomerRepresentation> findAll(){
-    Iterable<Customer> customers = repository.findAll();
     List<CustomerRepresentation> customerRepresentation = new ArrayList<>();
-    for (Customer customer : customers) {
-      customerRepresentation.add(new CustomerRepresentation(customer.getFirstName(),customer.getLastName()));
-    }
+      repository.findAll().forEach(customer ->
+          customerRepresentation
+              .add(new CustomerRepresentation(customer.getFirstName(),customer.getLastName())));
     return customerRepresentation;
   }
 
@@ -44,14 +43,4 @@ public class CustomerController {
     var customer = repository.findById(id);
     return CustomerRepresentation.from(customer.orElseGet(() -> new Customer()));
   }
-
-//  @GetMapping
-//  public List<CustomerRepresentation> fetchDataByFirstName(@RequestParam(required = true) String firstName){
-//    List<Customer> customers = repository.findByFirstName(firstName);
-//    List<CustomerRepresentation> customerRepresentation = new ArrayList<>();
-//    for (Customer customer : customers) {
-//      customerRepresentation.add(new CustomerRepresentation(customer.getFirstName(),customer.getLastName()));
-//    }
-//    return customerRepresentation;
-//  }
 }
