@@ -1,13 +1,12 @@
-package com.thoughtworks.movierating;
+package com.thoughtworks.customer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MovieRatingApplicationTests {
+class CustomerApplicationTests {
 
 	@Test
 	void contextLoads() {
 	}
-
 }
