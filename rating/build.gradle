@@ -2,6 +2,12 @@ plugins {
 	id 'org.springframework.boot' version '2.2.0.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
+    id "com.palantir.docker" version "0.22.1"
+}
+
+bootJar {
+    baseName = 'rating'
+    version =  '0.1.0'
 }
 
 group = 'com.thoughtworks'
@@ -10,6 +16,20 @@ sourceCompatibility = '12'
 
 repositories {
 	mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
+}
+docker {
+    name "${project.group}/${bootJar.baseName}"
+    copySpec.from(tasks.unpack.outputs).into("dependency")
+    buildArgs(['DEPENDENCY': "dependency"])
 }
 
 dependencies {
