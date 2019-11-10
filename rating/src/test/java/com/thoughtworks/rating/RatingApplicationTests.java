@@ -9,5 +9,4 @@ class RatingApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

@@ -10,23 +10,6 @@ public class RatingRepresentation {
 
   private long movieId;
 
-  public short getRating() {
-    return rating;
-  }
-
-  public String getComments() {
-    return comments;
-  }
-
-  public long getCustomerId() {
-    return customerId;
-  }
-
-  public long getMovieId() {
-    return movieId;
-  }
-
-
   public RatingRepresentation(short rating, String comments, long customerId, long movieId) {
     this.rating = rating;
     this.comments = comments;
@@ -34,7 +17,45 @@ public class RatingRepresentation {
     this.movieId = movieId;
   }
 
+  public RatingRepresentation() {
+
+  }
+
   public static RatingRepresentation from(Rating rating) {
     return new RatingRepresentation(rating.getRating(), rating.getComments(), rating.getCustomerId(), rating.getMovieId());
   }
+
+  public short getRating() {
+    return rating;
+  }
+
+  public void setRating(short rating) {
+    this.rating = rating;
+  }
+
+  public String getComments() {
+    return comments;
+  }
+
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
+
+  public long getCustomerId() {
+    return customerId;
+  }
+
+  public void setCustomerId(long customerId) {
+    this.customerId = customerId;
+  }
+
+  public long getMovieId() {
+    return movieId;
+  }
+
+  public void setMovieId(long movieId) {
+    this.movieId = movieId;
+  }
+
+
 }
