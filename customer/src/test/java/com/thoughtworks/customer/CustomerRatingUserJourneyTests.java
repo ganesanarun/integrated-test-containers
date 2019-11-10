@@ -11,33 +11,27 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.io.File;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @Testcontainers
 @ContextConfiguration(initializers = CustomerRatingUserJourneyTests.ContextInitializer.class)
-public class CustomerRatingUserJourneyTests {
+class CustomerRatingUserJourneyTests {
 
   @Container
-  static GenericContainer rating = new GenericContainer("com.thoughtworks/rating")
-      .withExposedPorts(8081);
+  private static RatingServiceContainer rating = new RatingServiceContainer("com.thoughtworks/rating");
 
   @Autowired
   MockMvc mvc;
 
   @Test
-  public void ableToRetrieveCustomerRatings() throws Exception {
+  void ableToRetrieveCustomerRatings() throws Exception {
     mvc.perform(get("/customers/1/ratings"))
         .andExpect(status().isOk());
   }
@@ -45,9 +39,9 @@ public class CustomerRatingUserJourneyTests {
   static class ContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-      System.out.println("Rating url:" + String.format("http://localhost:%d/", rating.getMappedPort(8081)));
+      System.out.println("Rating url:" + rating.getRatingUrl());
       TestPropertyValues values = TestPropertyValues.of(
-          "customer.rating.url=" + String.format("http://localhost:%d/", rating.getMappedPort(8081))
+          "customer.rating.url=" + rating.getRatingUrl()
       );
       values.applyTo(applicationContext);
     }
