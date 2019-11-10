@@ -31,9 +31,10 @@ public class CustomerUserJourneyTests {
 
   @Container
   static PostgreSQLContainer postgres = new PostgreSQLContainer()
-      .withDatabaseName("postgres")
+      .withDatabaseName("customer")
       .withUsername("postgres")
       .withPassword("docker");
+
   @Autowired
   MockMvc mvc;
 

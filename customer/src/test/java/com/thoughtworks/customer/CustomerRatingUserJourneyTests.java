@@ -11,8 +11,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +26,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers
 @ContextConfiguration(initializers = CustomerRatingUserJourneyTests.ContextInitializer.class)
 class CustomerRatingUserJourneyTests {
+
+  @Container
+  static PostgreSQLContainer postgres = new PostgreSQLContainer()
+      .withDatabaseName("customer")
+      .withUsername("postgres")
+      .withPassword("docker");
 
   @Container
   private static RatingServiceContainer rating = new RatingServiceContainer("com.thoughtworks/rating");
@@ -41,8 +50,8 @@ class CustomerRatingUserJourneyTests {
     public void initialize(ConfigurableApplicationContext applicationContext) {
       System.out.println("Rating url:" + rating.getRatingUrl());
       TestPropertyValues values = TestPropertyValues.of(
-          "customer.rating.url=" + rating.getRatingUrl()
-      );
+          Stream.of("customer.rating.url=" + rating.getRatingUrl(),
+              "spring.datasource.url=" + postgres.getJdbcUrl()));
       values.applyTo(applicationContext);
     }
   }

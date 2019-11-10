@@ -1,0 +1,47 @@
+version: '3'
+services:
+  customer:
+    image: 'com.thoughtworks/customer'
+    ports:
+      - "8080:8080"
+    networks:
+      - customer
+    depends_on:
+      - customer-postgres
+      - rating
+    links:
+      - rating
+  rating:
+    image: 'com.thoughtworks/rating'
+    expose:
+      - 8081
+    ports:
+      - 8081
+    depends_on:
+      - rating-postgres
+    networks:
+      - customer
+  rating-postgres:
+    image: 'postgres'
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=rating
+    expose:
+      - 5432
+    networks:
+      - customer
+  customer-postgres:
+    image: 'postgres'
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=customer
+    expose:
+      - 5432
+    networks:
+      - customer
+networks:
+  customer:
+    driver: bridge
+
