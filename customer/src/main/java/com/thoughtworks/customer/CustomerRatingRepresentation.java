@@ -1,10 +1,5 @@
 package com.thoughtworks.customer;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize
 public class CustomerRatingRepresentation {
   private short rating;
 
@@ -12,13 +7,19 @@ public class CustomerRatingRepresentation {
 
   private long customerId;
 
-  private long movieId;
+  private String movieId;
 
-  public CustomerRatingRepresentation(short rating, String comments, long customerId, long movieId) {
+  private String title;
+
+  private String year;
+
+  public CustomerRatingRepresentation(short rating, String comments, long customerId, String movieId, String title, String year) {
     this.rating = rating;
     this.comments = comments;
     this.customerId = customerId;
     this.movieId = movieId;
+    this.title = title;
+    this.year = year;
   }
 
   public short getRating() {
@@ -33,36 +34,15 @@ public class CustomerRatingRepresentation {
     return customerId;
   }
 
-  public long getMovieId() {
+  public String getMovieId() {
     return movieId;
   }
 
-  public CustomerRatingRepresentation() {
+  public String getTitle() {
+    return title;
   }
 
-  public void setRating(short rating) {
-    this.rating = rating;
-  }
-
-  public void setComments(String comments) {
-    this.comments = comments;
-  }
-
-  public void setCustomerId(long customerId) {
-    this.customerId = customerId;
-  }
-
-  public void setMovieId(long movieId) {
-    this.movieId = movieId;
-  }
-
-  @Override
-  public String toString() {
-    return String.format(
-        "{rating: %d, comments: %s, customer-id: %d, movie-id: %d}",
-        rating,
-        comments,
-        customerId,
-        movieId);
+  public String getYear() {
+    return year;
   }
 }

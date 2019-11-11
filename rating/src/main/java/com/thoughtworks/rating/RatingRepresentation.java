@@ -8,9 +8,9 @@ public class RatingRepresentation {
 
   private long customerId;
 
-  private long movieId;
+  private String movieId;
 
-  public RatingRepresentation(short rating, String comments, long customerId, long movieId) {
+  public RatingRepresentation(short rating, String comments, long customerId, String movieId) {
     this.rating = rating;
     this.comments = comments;
     this.customerId = customerId;
@@ -49,13 +49,11 @@ public class RatingRepresentation {
     this.customerId = customerId;
   }
 
-  public long getMovieId() {
+  public String getMovieId() {
     return movieId;
   }
 
-  public void setMovieId(long movieId) {
+  public void setMovieId(String movieId) {
     this.movieId = movieId;
   }
-
-
 }

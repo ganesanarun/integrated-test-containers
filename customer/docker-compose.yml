@@ -4,6 +4,8 @@ services:
     image: 'com.thoughtworks/customer'
     ports:
       - "8080:8080"
+    expose:
+      - 80
     networks:
       - customer
     depends_on:

@@ -17,8 +17,9 @@ public class CustomerProperties {
   @Valid
   private ServiceUrlProperties rating;
 
-  public CustomerProperties() {
-  }
+  @NestedConfigurationProperty
+  @Valid
+  private ServiceUrlProperties movie;
 
   public void setRating(ServiceUrlProperties rating) {
     this.rating = rating;
@@ -26,6 +27,14 @@ public class CustomerProperties {
 
   public ServiceUrlProperties getRating() {
     return rating;
+  }
+
+  public ServiceUrlProperties getMovie() {
+    return movie;
+  }
+
+  public void setMovie(ServiceUrlProperties movie) {
+    this.movie = movie;
   }
 
   public static class ServiceUrlProperties {

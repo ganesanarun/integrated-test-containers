@@ -13,7 +13,7 @@ class RatingServiceContainer extends GenericContainer<RatingServiceContainer> {
     postgres = new PostgreSQLContainer()
         .withDatabaseName("postgres")
         .withUsername("postgres")
-        .withPassword("docker");;
+        .withPassword("docker");
   }
 
   @Override

@@ -16,14 +16,14 @@ public class Rating implements Serializable {
   private long customerId;
 
   @Column(name = "movieid")
-  private long movieId;
+  private String movieId;
 
   private short rating;
 
   @Column
   private String comments;
 
-  public Rating(long customerId, long movieId, short rating, String comments) {
+  public Rating(long customerId, String movieId, short rating, String comments) {
     this.customerId = customerId;
     this.movieId = movieId;
     this.rating = rating;
@@ -49,11 +49,11 @@ public class Rating implements Serializable {
     this.customerId = customerId;
   }
 
-  public long getMovieId() {
+  public String getMovieId() {
     return movieId;
   }
 
-  public void setMovieId(long movieId) {
+  public void setMovieId(String movieId) {
     this.movieId = movieId;
   }
 

@@ -44,7 +44,7 @@ public class RatingUserJourneyTests {
         (short)4,
         "interesting",
         1,
-        1);
+        "1");
     mvc.perform(post("/ratings")
         .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -55,7 +55,7 @@ public class RatingUserJourneyTests {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(result -> {
           System.out.println(result.getResponse().getContentAsString());
-          var expectedResponse = "[{\"rating\":4,\"comments\":\"interesting\",\"customerId\":1,\"movieId\":1}]";
+          var expectedResponse = "[{\"rating\":4,\"comments\":\"interesting\",\"customerId\":1,\"movieId\":\"1\"}]";
           assertEquals(expectedResponse, result.getResponse().getContentAsString());
         });
   }
