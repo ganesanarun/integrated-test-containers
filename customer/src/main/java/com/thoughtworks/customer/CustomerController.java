@@ -15,11 +15,10 @@ public class CustomerController {
 
   @PostMapping("/bulk")
   public String bulkcreate(){
-    repository.save(new Customer("Ganesan", "Arunachalam"));
-    repository.saveAll(Arrays.asList(new Customer("Salim", "Khan")
-        , new Customer("Rajesh", "Parihar")
+    repository.saveAll(Arrays.asList(
+         new Customer("Steve", "Smith")
         , new Customer("Rahul", "Dravid")
-        , new Customer("Dharmendra", "Bhojwani")));
+        , new Customer("ABD", "V")));
     return "Customers are created";
   }
 

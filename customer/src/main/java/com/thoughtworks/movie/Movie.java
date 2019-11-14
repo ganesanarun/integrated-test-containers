@@ -23,9 +23,7 @@ public class Movie {
 
   public Optional<MovieRepresentation> getFor(String id) {
     try {
-      System.out.println("========================");
       System.out.println(new URI(movieService.getMovie().getUrl() + String.format("&i=%s", id)));
-      System.out.println("========================");
       final var exchange = restTemplate.exchange(
           new URI(movieService.getMovie().getUrl() + String.format("&i=%s", id)),
           HttpMethod.GET,

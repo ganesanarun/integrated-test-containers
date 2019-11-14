@@ -48,7 +48,7 @@ public class CustomerUserJourneyTests {
         .andExpect(content().contentType(mediaType))
         .andExpect(result -> {
           System.out.println(result.getResponse().getContentAsString());
-          var expectedResponse = "[{\"firstName\":\"Ganesan\",\"lastName\":\"Arunachalam\"},{\"firstName\":\"Salim\",\"lastName\":\"Khan\"},{\"firstName\":\"Rajesh\",\"lastName\":\"Parihar\"},{\"firstName\":\"Rahul\",\"lastName\":\"Dravid\"},{\"firstName\":\"Dharmendra\",\"lastName\":\"Bhojwani\"}]";
+          var expectedResponse = "[{\"firstName\":\"Steve\",\"lastName\":\"Smith\"},{\"firstName\":\"Rahul\",\"lastName\":\"Dravid\"},{\"firstName\":\"ABD\",\"lastName\":\"V\"}]";
           assertEquals(expectedResponse, result.getResponse().getContentAsString());
         });
   }
