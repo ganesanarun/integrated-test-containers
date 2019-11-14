@@ -1,15 +1,15 @@
 package com.thoughtworks.movie;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize
 public class MovieRepresentation {
-  @JsonProperty("Title")
+  @JsonAlias({"Title", "title"})
   private String title;
-  @JsonProperty("Year")
+  @JsonAlias({"Year", "year"})
   private String year;
 
   public MovieRepresentation() {

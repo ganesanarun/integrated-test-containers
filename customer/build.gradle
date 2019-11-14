@@ -51,6 +51,8 @@ dependencies {
     }
     testImplementation "org.testcontainers:junit-jupiter:1.12.3"
     testCompile group: 'org.testcontainers', name: 'postgresql', version: '1.12.3'
+    testCompile "org.testcontainers:mockserver:1.12.3"
+    testCompile 'org.mock-server:mockserver-client-java:5.5.4'
 }
 
 test {

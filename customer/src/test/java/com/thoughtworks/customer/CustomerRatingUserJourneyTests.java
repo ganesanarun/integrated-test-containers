@@ -1,7 +1,11 @@
 package com.thoughtworks.customer;
 
+import com.google.common.net.MediaType;
+import com.thoughtworks.movie.MovieRepresentation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockserver.client.MockServerClient;
+import org.mockserver.model.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,15 +16,17 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
+import org.testcontainers.containers.MockServerContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockserver.model.HttpResponse.response;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -39,6 +45,9 @@ class CustomerRatingUserJourneyTests {
   @Container
   private static RatingServiceContainer rating = new RatingServiceContainer("com.thoughtworks/rating");
 
+  @Container
+  private static MockServerContainer movie = new MockServerContainer();
+
   @Autowired
   MockMvc mvc;
 
@@ -47,6 +56,7 @@ class CustomerRatingUserJourneyTests {
 
   @Test
   void ableToRetrieveCustomerRatings() throws Exception {
+
     mvc.perform(post("/customers/bulk"))
         .andDo(result -> {
           final var response = restTemplate.postForEntity(
@@ -55,10 +65,16 @@ class CustomerRatingUserJourneyTests {
               String.class);
           assertEquals("{ id: 1 }", response.getBody());
         }).andDo(result -> {
+      new MockServerClient(movie.getContainerIpAddress(), movie.getServerPort())
+          .when(HttpRequest.request())
+          .respond(response()
+              .withBody(new ObjectMapper()
+                  .writeValueAsString(new MovieRepresentation("Batman rises", "1992")),
+                  MediaType.JSON_UTF_8));
       mvc.perform(get("/customers/1/ratings"))
           .andExpect(status().isOk())
           .andExpect(finalResult -> {
-            assertEquals("[{\"rating\":4,\"comments\":\"from tests\",\"customerId\":1,\"movieId\":\"random_movie\",\"title\":\"<<No entry>>\",\"year\":\"<<No entry>>\"}]",
+            assertEquals("[{\"rating\":4,\"comments\":\"from tests\",\"customerId\":1,\"movieId\":\"random_movie\",\"title\":\"Batman rises\",\"year\":\"1992\"}]",
                 finalResult.getResponse().getContentAsString());
           });
     });
@@ -70,7 +86,8 @@ class CustomerRatingUserJourneyTests {
       System.out.println("Rating url:" + rating.getRatingUrl());
       TestPropertyValues values = TestPropertyValues.of(
           Stream.of("customer.rating.url=" + rating.getRatingUrl(),
-              "spring.datasource.url=" + postgres.getJdbcUrl()));
+              "spring.datasource.url=" + postgres.getJdbcUrl(),
+              "customer.movie.url=" + String.format("%s/?s=sample",movie.getEndpoint())));
       values.applyTo(applicationContext);
     }
   }
