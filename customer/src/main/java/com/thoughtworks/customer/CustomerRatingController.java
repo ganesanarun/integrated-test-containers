@@ -34,8 +34,9 @@ public class CustomerRatingController {
   }
 
   @GetMapping("/ratings")
-  public List<CustomerRatingRepresentation> all(@PathVariable String customerId) throws URISyntaxException {
-    final var exchange = restTemplate.exchange(new URI(customerProperties.getRating().getUrl() + "/ratings"),
+  public List<CustomerRatingRepresentation> all(@PathVariable long customerId) throws URISyntaxException {
+    final var exchange = restTemplate.exchange(new URI(String.format("%s/%s?customerId=%d",
+        customerProperties.getRating().getUrl(), "ratings", customerId)),
         HttpMethod.GET,
         null,
         new ParameterizedTypeReference<List<RatingRepresentation>>() {
